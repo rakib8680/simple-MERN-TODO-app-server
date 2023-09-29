@@ -26,7 +26,7 @@ app.use(express.json());
 
 
 
-const uri = `mongodb+srv://${process.env.db_user}:${process.env.db_password}@cluster0.crku76a.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.crku76a.mongodb.net/?retryWrites=true&w=majority`
 
 const client = new MongoClient(uri, {
     serverApi: {
@@ -40,13 +40,30 @@ async function run() {
     try {
         // await client.connect();
 
+        // collection 
+        const tasksCollection = client.db('to-do-app').collection('tasks');
+
+
+
+
+
+        app.post('/tasks', async (req, res) => {
+            const task = req.body;
+            const result = await tasksCollection.insertOne(task);
+            res.send(result);
+        });
+
+        app.get('/tasks', async (req, res) => {
+            const result = await tasksCollection.find().toArray();
+            res.send(result);
+        })
 
 
 
 
 
 
-        
+
 
 
 
